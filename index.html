@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Minha Biblioteca: organize os livros que você possui ou pretende ler.">
-  <title>Minha Biblioteca</title>
+  <title>Personal Library</title>
   <link rel="stylesheet" href="assets/css/style.css">
   <script src="assets/js/script.js" defer></script>
 </head>
@@ -27,7 +27,7 @@
   </nav>
  
 <main>
-
+ 
     <section id="cadastro" aria-labelledby="titulo-cadastro">
       <h2 id="titulo-cadastro">Cadastrar livro</h2>
       <p>Preencha os dados para adicionar um livro à sua biblioteca. Os campos marcados com * são obrigatórios.</p>
@@ -37,17 +37,17 @@
           <legend>Dados do livro</legend>
  
           <p>
-            <label for="titulo">Título *</label><br>
+            <label for="titulo">Título</label><br>
             <input type="text" id="titulo" name="titulo" placeholder="Ex.: Dom Casmurro" required>
           </p>
  
           <p>
-            <label for="autor">Autor *</label><br>
+            <label for="autor">Autor</label><br>
             <input type="text" id="autor" name="autor" placeholder="Ex.: Machado de Assis" required>
           </p>
  
           <p>
-            <label for="categoria">Categoria *</label><br>
+            <label for="categoria">Categoria</label><br>
             <select id="categoria" name="categoria" required>
               <option value="">Selecione...</option>
               <option value="romance">Romance</option>
@@ -71,7 +71,7 @@
         </fieldset>
  
         <fieldset>
-          <legend>Leitura *</legend>
+          <legend>Leitura</legend>
           <p>
             <input type="radio" id="status-quero" name="status" value="quero-ler" required>
             <label for="status-quero">Quero ler</label>
@@ -107,10 +107,192 @@
         <p>
           <button type="submit">Salvar livro</button>
           <button type="reset">Limpar campos</button>
-          <!-- Aparecerá somente durante a edição (Etapa 3) -->
           <button type="button" hidden>Cancelar edição</button>
         </p>
       </form>
     </section>
 
-    
+    <section id="biblioteca" aria-labelledby="titulo-biblioteca">
+      <h2 id="titulo-biblioteca">Meus livros</h2>
+ 
+      <form action="#" method="get" aria-label="Pesquisar, filtrar e ordenar livros">
+        <fieldset>
+          <legend>Encontrar livros</legend>
+ 
+          <p>
+            <label for="busca">Pesquisar por título ou autor</label><br>
+            <input type="search" id="busca" name="busca" placeholder="Digite para pesquisar">
+          </p>
+ 
+          <p>
+            <label for="filtro-categoria">Categoria</label>
+            <select id="filtro-categoria" name="filtroCategoria">
+              <option value="">Todas</option>
+              <option value="romance">Romance</option>
+              <option value="ficcao-cientifica">Ficção científica</option>
+              <option value="fantasia">Fantasia</option>
+              <option value="tecnologia">Tecnologia</option>
+              <option value="biografia">Biografia</option>
+              <option value="outros">Outros</option>
+            </select>
+ 
+            <label for="filtro-status">Status</label>
+            <select id="filtro-status" name="filtroStatus">
+              <option value="">Todos</option>
+              <option value="quero-ler">Quero ler</option>
+              <option value="lendo">Lendo</option>
+              <option value="lido">Lido</option>
+            </select>
+ 
+            <input type="checkbox" id="filtro-favoritos" name="filtroFavoritos">
+            <label for="filtro-favoritos">Somente favoritos</label>
+          </p>
+ 
+          <p>
+            <label for="ordenar">Ordenar por</label>
+            <select id="ordenar" name="ordenar">
+              <option value="titulo">Título</option>
+              <option value="autor">Autor</option>
+              <option value="ano">Ano de publicação</option>
+              <option value="avaliacao">Avaliação</option>
+            </select>
+ 
+            <label for="direcao">Direção</label>
+            <select id="direcao" name="direcao">
+              <option value="asc">Crescente</option>
+              <option value="desc">Decrescente</option>
+            </select>
+          </p>
+ 
+          <p>
+            <button type="submit">Aplicar</button>
+            <button type="reset">Limpar filtros</button>
+          </p>
+        </fieldset>
+      </form>
+ 
+      <p><strong>4</strong> livros encontrados.</p>
+ 
+      <table>
+        <caption>Livros cadastrados na biblioteca</caption>
+        <thead>
+          <tr>
+            <th scope="col">Nº</th>
+            <th scope="col">Título</th>
+            <th scope="col">Autor</th>
+            <th scope="col">Categoria</th>
+            <th scope="col">Ano</th>
+            <th scope="col">Status</th>
+            <th scope="col">Avaliação</th>
+            <th scope="col">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <th scope="row">Dom Casmurro</th>
+            <td>Machado de Assis</td>
+            <td>Romance</td>
+            <td>1899</td>
+            <td>Lido</td>
+            <td>5</td>
+            <td>
+              <button type="button">Ver detalhes</button>
+              <button type="button">Editar</button>
+              <button type="button">Excluir</button>
+            </td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <th scope="row">Duna</th>
+            <td>Frank Herbert</td>
+            <td>Ficção científica</td>
+            <td>1965</td>
+            <td>Lendo</td>
+            <td>—</td>
+            <td>
+              <button type="button">Ver detalhes</button>
+              <button type="button">Editar</button>
+              <button type="button">Excluir</button>
+            </td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <th scope="row">Código Limpo</th>
+            <td>Robert C. Martin</td>
+            <td>Tecnologia</td>
+            <td>2008</td>
+            <td>Quero ler</td>
+            <td>—</td>
+            <td>
+              <button type="button">Ver detalhes</button>
+              <button type="button">Editar</button>
+              <button type="button">Excluir</button>
+            </td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <th scope="row">O Hobbit</th>
+            <td>J. R. R. Tolkien</td>
+            <td>Fantasia</td>
+            <td>1937</td>
+            <td>Lido</td>
+            <td>4</td>
+            <td>
+              <button type="button">Ver detalhes</button>
+              <button type="button">Editar</button>
+              <button type="button">Excluir</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+
+    <!-- DETALHES -->
+    <aside id="detalhes" aria-labelledby="titulo-detalhes">
+      <h2 id="titulo-detalhes">Detalhes do livro</h2>
+ 
+      <article>
+        <header>
+          <h3>Dom Casmurro</h3>
+          <p>por Machado de Assis</p>
+        </header>
+ 
+        <dl>
+          <dt>Categoria</dt>
+          <dd>Romance</dd>
+          <dt>Ano de publicação</dt>
+          <dd>1899</dd>
+          <dt>Páginas</dt>
+          <dd>256</dd>
+          <dt>Status de leitura</dt>
+          <dd>Lido</dd>
+          <dt>Avaliação</dt>
+          <dd>5 de 5</dd>
+          <dt>Terminado em</dt>
+          <dd><time datetime="2026-08-15">15/08/2026</time></dd>
+          <dt>Favorito</dt>
+          <dd>Sim</dd>
+          <dt>Anotações</dt>
+          <dd>Clássico sobre ciúme e memória. Vale reler.</dd>
+        </dl>
+ 
+        <footer>
+          <button type="button">Editar este livro</button>
+          <button type="button">Excluir este livro</button>
+        </footer>
+      </article>
+ 
+      <p hidden>Selecione um livro na lista para ver os detalhes.</p>
+    </aside>
+ 
+  </main>
+ 
+ 
+  <footer>
+    <p>Minha Biblioteca — Trabalho Prático Individual, Etapa 1.</p>
+    <p><a href="pages/sobre.html">Sobre o projeto</a> · <a href="#topo">Voltar ao topo</a></p>
+  </footer>
+ 
+</body>
+</html>      
