@@ -110,3 +110,104 @@ nav a:hover {
   border: 1px solid #ddd6c5;
   border-radius: 14px;
 }
+
+/* Formulários */
+fieldset {
+  margin: 0 0 16px;
+  padding: 16px;
+  border: 1px solid #ddd6c5;
+  border-radius: 10px;
+}
+
+legend {
+  padding: 0 8px;
+  font-weight: 700;
+  color: #8a5a3c;
+}
+
+/* Campos do cadastro em duas colunas (Grid) */
+#cadastro fieldset {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 16px;
+}
+
+fieldset p,
+.campo {
+  margin: 0;
+}
+
+.campo-largo {
+  grid-column: 1 / -1;
+}
+
+label {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 700;
+}
+
+/* Opções de status de leitura (Flexbox) */
+.opcoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+}
+
+.opcoes label {
+  display: inline;
+  font-weight: 400;
+}
+
+/* Campos de texto, número, data, pesquisa, seleção e anotações */
+input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="search"],
+select,
+textarea {
+  width: 100%;
+  padding: 10px 12px;
+  font-family: inherit;
+  font-size: 16px;
+  color: #1f2933;
+  background-color: #f5f5f4;
+  border: 1px solid #cfc8b4;
+  border-radius: 8px;
+}
+
+textarea {
+  resize: none;
+}
+
+/* Remove as setinhas dos campos numéricos */
+input[type="number"] {
+  appearance: textfield;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="text"]:hover,
+input[type="number"]:hover,
+input[type="date"]:hover,
+input[type="search"]:hover,
+select:hover,
+textarea:hover {
+  border-color: #2f5d46;
+}
+
+/* Campo selecionado: fundo branco, sem contorno verde */
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+input[type="search"]:focus,
+select:focus,
+textarea:focus {
+  background-color: #ffffff;
+  border-color: #2f5d46;
+  outline: none;
+}
