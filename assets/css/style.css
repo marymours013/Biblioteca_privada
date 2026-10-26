@@ -389,3 +389,47 @@ dd {
 .rodape p {
   margin: 4px 0;
 }
+
+/* -- Responsividade -- */
+
+/* Telas médias: tudo em uma coluna */
+@media (max-width: 1000px) {
+  .layout-app {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Telas pequenas */
+@media (max-width: 600px) {
+  #topo {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  #topo h1 {
+    font-size: 26px;
+  }
+
+  nav ul {
+    justify-content: center;
+    padding: 8px;
+  }
+
+  .layout-app section,
+  .layout-app aside {
+    padding: 16px;
+  }
+
+  #cadastro fieldset {
+    grid-template-columns: 1fr;
+  }
+
+  dl {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  dd {
+    margin-bottom: 8px;
+  }
+}
