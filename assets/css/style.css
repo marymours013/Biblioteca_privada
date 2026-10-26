@@ -342,3 +342,50 @@ tbody tr:hover {
   color: #1e40af;
   background-color: #e3ecfb;
 }
+
+/* Detalhes */
+#detalhes header {
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #c9a24b;
+}
+
+#detalhes header p {
+  margin: 0;
+  color: #5b6670;
+}
+
+dl {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 8px 16px;
+  margin: 0 0 16px;
+}
+
+dt {
+  font-weight: 700;
+  color: #8a5a3c;
+}
+
+dd {
+  margin: 0;
+}
+
+#detalhes footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Rodapé */
+.rodape {
+  padding: 24px;
+  text-align: center;
+  font-size: 14px;
+  color: #5b6670;
+  border-top: 1px solid #ddd6c5;
+}
+
+.rodape p {
+  margin: 4px 0;
+}
