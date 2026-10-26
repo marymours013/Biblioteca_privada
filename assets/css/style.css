@@ -81,3 +81,32 @@ nav a:hover {
   color: #2f5d46;
   border-bottom-color: #c9a24b;
 }
+
+/* Layout principal (Grid) */
+.layout-app {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 24px;
+  width: 94%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 0 32px;
+}
+
+/* O cadastro ocupa a linha inteira; a lista e os detalhes ficam lado a lado */
+#cadastro {
+  grid-column: 1 / -1;
+}
+
+#detalhes {
+  align-self: start;
+}
+
+.layout-app section,
+.layout-app aside {
+  min-width: 0; /* permite que a tabela role dentro da coluna */
+  padding: 24px;
+  background-color: #ffffff;
+  border: 1px solid #ddd6c5;
+  border-radius: 14px;
+}
