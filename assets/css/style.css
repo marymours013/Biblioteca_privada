@@ -281,3 +281,64 @@ textarea:focus {
   background-color: #8f1c12;
 }
 
+/* Listagem */
+.contador {
+  color: #5b6670;
+}
+
+.tabela-responsiva {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+caption {
+  padding-bottom: 8px;
+  text-align: left;
+  font-weight: 700;
+  color: #5b6670;
+}
+
+th,
+td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ece6d6;
+}
+
+thead th {
+  color: #ffffff;
+  background-color: #2f5d46;
+  white-space: nowrap;
+}
+
+tbody tr:hover {
+  background-color: #f1ecdd;
+}
+
+/* Selos de status */
+.selo {
+  display: inline-block;
+  padding: 3px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 999px;
+}
+
+.selo-lido {
+  color: #166534;
+  background-color: #e3f4e8;
+}
+
+.selo-lendo {
+  color: #92400e;
+  background-color: #fdf0d5;
+}
+
+.selo-quero {
+  color: #1e40af;
+  background-color: #e3ecfb;
+}
