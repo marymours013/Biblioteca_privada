@@ -394,6 +394,85 @@ dd {
   margin: 4px 0;
 }
 
+/* Foco por teclado em links e botões */
+a:focus-visible,
+.btn:focus-visible {
+  outline: 3px solid #9cc5ae;
+  outline-offset: 2px;
+}
+
+/* Mensagens de feedback */
+.mensagem {
+  padding: 12px 16px;
+  border: 1px solid;
+  border-radius: 8px;
+}
+
+.mensagem-sucesso {
+  color: #166534;
+  background-color: #e3f4e8;
+  border-color: #a7d9b5;
+}
+
+.mensagem-erro {
+  color: #991b1b;
+  background-color: #fdeaea;
+  border-color: #f0b4b4;
+}
+
+.mensagem-info {
+  text-align: center;
+  color: #5b6670;
+  background-color: #faf7ef;
+  border: 1px dashed #b9b19c;
+}
+
+/* Busca na API */
+.busca-api {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+.dica {
+  font-size: 14px;
+  color: #5b6670;
+}
+
+.resultados-api {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.resultados-api li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid #ddd6c5;
+  border-radius: 8px;
+}
+
+.resultados-api li + li {
+  margin-top: 8px;
+}
+
+/* Modo de edição do cadastro */
+#cadastro.modo-edicao {
+  border-color: #c9a24b;
+  background-color: #fffaf0;
+}
+
+/* Livro selecionado na tabela */
+tbody tr.selecionada {
+  background-color: #eaf2ed;
+}
+
+
 /* -- Responsividade -- */
 
 /* Telas médias: tudo em uma coluna */
