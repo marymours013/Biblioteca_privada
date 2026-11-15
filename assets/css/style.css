@@ -104,11 +104,12 @@ nav a:hover {
 
 .layout-app section,
 .layout-app aside {
-  min-width: 0; /* permite que a tabela role dentro da coluna */
+  min-width: 360px;
   padding: 24px;
   background-color: #ffffff;
   border: 1px solid #ddd6c5;
   border-radius: 14px;
+  box-shadow: 0 4px 14px rgb(31 41 51 / 0.07);
 }
 
 /* Formulários */
@@ -151,11 +152,13 @@ label {
 .opcoes {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px 20px;
+  align-items: center;
+  gap: 8px;
 }
 
 .opcoes label {
   display: inline;
+  margin: 0 16px 0 0;
   font-weight: 400;
 }
 
@@ -209,7 +212,8 @@ select:focus,
 textarea:focus {
   background-color: #ffffff;
   border-color: #2f5d46;
-  outline: none;
+  outline: 3px solid #9cc5ac;
+  outline: 2px;
 }
 
 /* Pesquisa, filtros e ordenação (Flexbox) */
