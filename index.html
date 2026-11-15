@@ -46,14 +46,6 @@
             <input type="text" id="titulo" name="titulo" placeholder="Ex.: Dom Casmurro" required>
           </p>
 
-          <div class="campo-largo busca-api">
-            <button type="button" id="btn-buscar-api" class="btn btn-secundario">Buscar dados do livro</button>
-            <span class="dica">Digite o título e busque o autor, o ano e as páginas no catálogo Open Library.</span>
-          </div>
-
-          <p id="mensagem-api" class="mensagem campo-largo" role="status" hidden></p>
-          <ul id="resultados-api" class="resultados-api campo-largo" hidden></ul>
-
           <p>
             <label for="autor">Autor *</label>
             <input type="text" id="autor" name="autor" placeholder="Ex.: Machado de Assis" required>
@@ -131,25 +123,10 @@
         <fieldset>
           <legend>Encontrar livros</legend>
 
-          <div class="campo-largo busca-api">
-            <button type="button" id="btn-buscar-api" class="btn btn-secundario">Buscar dados do livro</button>
-            <span class="dica">Digite o título e busque o autor, o ano e as páginas no catálogo Open Library.</span>
-          </div>
-
           <div class="campo campo-largo">
             <label for="busca">Pesquisar por título ou autor</label>
             <input type="search" id="busca" name="busca" placeholder="Digite para pesquisar">
           </div>
-
-          <p id="mensagem-api" class="mensagem campo-largo" role="status" hidden></p>
-          <ul id="resultados-api" class="resultados-api campo-largo" hidden></ul>
-
-          <form id="form-filtros" action="#" method="get" aria-label="Pesquisar, filtrar e ordenar livros"></form>
-
-          <p class="acoes campo-largo">
-            <button type="button" id="btn-limpar-filtros" class="btn btn-secundario">Limpar filtros</button>
-          </p>
-
 
           <div class="campo">
             <label for="filtro-categoria">Categoria</label>
@@ -177,10 +154,10 @@
           <div class="campo">
             <label for="ordenar">Ordenar por</label>
             <select id="ordenar" name="ordenar">
-              <option value="titulo">Título</option>
-              <option value="autor">Autor</option>
-              <option value="ano">Ano de publicação</option>
-              <option value="avaliacao">Avaliação</option>
+              <option value="titulo">Título(A–Z)</option>
+              <option value="autor">Autor(A–Z)</option>
+              <option value="ano">Ano de publicação(mais antigo primeiro)</option>
+              <option value="avaliacao">Avaliação(maior primeiro)</option>
             </select>
           </div>
 
@@ -213,6 +190,24 @@
 
         <p id="mensagem-vazia" class="mensagem mensagem-info" hidden>Nenhum livro encontrado.Cadastre um livro ou altere os filtros.</p>
 
+      <!-- Busca no catálogo Open Library (formulário próprio) -->
+      <form id="form-api" action="#" method="get" aria-label="Buscar livros no catálogo Open Library">
+        <fieldset>
+          <legend>Buscar no catálogo Open Library</legend>
+
+          <div class="campo campo-largo">
+            <label for="busca-api">Título ou autor do livro</label>
+            <input type="search" id="busca-api" name="buscaApi" placeholder="Ex.: Dom Casmurro">
+          </div>
+
+          <p class="acoes campo-largo">
+            <button type="submit" id="btn-buscar-api" class="btn btn-secundario">Buscar no catálogo</button>
+          </p>
+
+          <p id="mensagem-api" class="mensagem campo-largo" role="status" hidden></p>
+          <ul id="resultados-api" class="resultados-api campo-largo" hidden></ul>
+        </fieldset>
+      </form>
     </section>
 
     <!-- DETALHES -->
@@ -249,8 +244,7 @@
     <button type="button" id="btn-excluir-detalhe" class="btn btn-perigo">Excluir livro</button>
   </footer>
   </article>
-
-    </aside>
+</aside>
 
   </main>
 
