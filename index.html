@@ -6,6 +6,7 @@
   <meta name="description" content="Personal Library: organize os livros que você possui ou pretende ler.">
   <title>Personal Library</title>
   <link rel="stylesheet" href="assets/css/style.css">
+  <script src="assets/js/script.js" defer></script>
 </head>
 <body>
 
@@ -30,9 +31,13 @@
     <section id="cadastro" aria-labelledby="titulo-cadastro">
       <h2 id="titulo-cadastro">Cadastrar livro</h2>
       <p>Preencha os dados para adicionar um livro à sua biblioteca.Os campos marcados com * são obrigatórios.</p>
-
       
-      <form action="#" method="post">
+      <p id="mensagem-cadastro" class="mensagem" role="status" hidden></p>
+      
+      <form id="form-livro" action="#" method="post" novalidate>
+        <input type="hidden" id="livro-id" name="id">
+
+
         <fieldset>
           <legend>Dados do livro</legend>
 
@@ -40,6 +45,14 @@
             <label for="titulo">Título *</label>
             <input type="text" id="titulo" name="titulo" placeholder="Ex.: Dom Casmurro" required>
           </p>
+
+          <div class="campo-largo busca-api">
+            <button type="button" id="btn-buscar-api" class="btn btn-secundario">Buscar dados do livro</button>
+            <span class="dica">Digite o título e busque o autor, o ano e as páginas no catálogo Open Library.</span>
+          </div>
+
+          <p id="mensagem-api" class="mensagem campo-largo" role="status" hidden></p>
+          <ul id="resultados-api" class="resultados-api campo-largo" hidden></ul>
 
           <p>
             <label for="autor">Autor *</label>
@@ -101,8 +114,9 @@
         </p>
 
         <p class="acoes campo-largo">
-          <button type="submit" class="btn btn-primario">Salvar livro</button>
-          <button type="reset" class="btn btn-secundario">Limpar campos</button>
+          <button type="submit" id="btn-salvar" class="btn btn-primario">Salvar livro</button>
+          <button type="button" id="btn-limpar" class="btn btn-secundario">Limpar campos</button>
+          <button type="button" id="btn-cancelar" class="btn btn-secundario" hidden>Cancelar edição</button>
         </p>
       </form>
     </section>
@@ -113,13 +127,29 @@
 
       <!-- Pesquisa, filtros e ordenação -->
       <form action="#" method="get" aria-label="Pesquisar, filtrar e ordenar livros">
+      
         <fieldset>
           <legend>Encontrar livros</legend>
+
+          <div class="campo-largo busca-api">
+            <button type="button" id="btn-buscar-api" class="btn btn-secundario">Buscar dados do livro</button>
+            <span class="dica">Digite o título e busque o autor, o ano e as páginas no catálogo Open Library.</span>
+          </div>
 
           <div class="campo campo-largo">
             <label for="busca">Pesquisar por título ou autor</label>
             <input type="search" id="busca" name="busca" placeholder="Digite para pesquisar">
           </div>
+
+          <p id="mensagem-api" class="mensagem campo-largo" role="status" hidden></p>
+          <ul id="resultados-api" class="resultados-api campo-largo" hidden></ul>
+
+          <form id="form-filtros" action="#" method="get" aria-label="Pesquisar, filtrar e ordenar livros"></form>
+
+          <p class="acoes campo-largo">
+            <button type="button" id="btn-limpar-filtros" class="btn btn-secundario">Limpar filtros</button>
+          </p>
+
 
           <div class="campo">
             <label for="filtro-categoria">Categoria</label>
@@ -155,13 +185,12 @@
           </div>
 
           <p class="acoes campo-largo">
-            <button type="submit" class="btn btn-primario">Aplicar</button>
-            <button type="reset" class="btn btn-secundario">Limpar filtros</button>
+            <button type="button" id="btn-limpar-filtros" class="btn btn-secundario">Limpar filtros</button>
           </p>
         </fieldset>
       </form>
 
-      <p class="contador" role="status"><strong>2</strong> livros encontrados.</p>
+      <p id="contador" class="contador" role="status"></p>
 
       <div class="tabela-responsiva" role="region" aria-label="Tabela de livros" tabindex="0">
       <table>
@@ -178,36 +207,11 @@
             <th scope="col">Ações</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td data-label="Nº">1</td>
-            <th scope="row" data-label="Título">Dom Casmurro</th>
-            <td data-label="Autor">Machado de Assis</td>
-            <td data-label="Categoria">Romance</td>
-            <td data-label="Ano">1899</td>
-            <td data-label="Status"><span class="selo selo-lido">Lido</span></td>
-            <td data-label="Avaliação">5</td>
-            <td data-label="Ações">
-              <button type="button" class="btn btn-secundario btn-pequeno">Detalhes</button>
-              <button type="button" class="btn btn-perigo btn-pequeno">Excluir</button>
-            </td>
-          </tr>
-          <tr>
-            <td data-label="Nº">2</td>
-            <th scope="row" data-label="Título">Código Limpo</th>
-            <td data-label="Autor">Robert C. Martin</td>
-            <td data-label="Categoria">Tecnologia</td>
-            <td data-label="Ano">2008</td>
-            <td data-label="Status"><span class="selo selo-quero">Quero ler</span></td>
-            <td data-label="Avaliação">—</td>
-            <td data-label="Ações">
-              <button type="button" class="btn btn-secundario btn-pequeno">Detalhes</button>
-              <button type="button" class="btn btn-perigo btn-pequeno">Excluir</button>
-            </td>
-          </tr>
-        </tbody>
+          <tbody id="lista-livros"></tbody>
       </table>
       </div>
+
+        <p id="mensagem-vazia" class="mensagem mensagem-info" hidden>Nenhum livro encontrado.Cadastre um livro ou altere os filtros.</p>
 
     </section>
 
@@ -215,41 +219,43 @@
     <aside id="detalhes" aria-labelledby="titulo-detalhes">
       <h2 id="titulo-detalhes">Detalhes do livro</h2>
 
-      <article>
-        <header>
-          <h3>Dom Casmurro</h3>
-          <p>por Machado de Assis</p>
-        </header>
+    <p id="detalhes-vazio" class="mensagem mensagem-info">Selecione um livro na lista para ver os detalhes.</p>
 
-        <dl>
-          <dt>Categoria</dt>
-          <dd>Romance</dd>
-          <dt>Ano de publicação</dt>
-          <dd>1899</dd>
-          <dt>Páginas</dt>
-          <dd>256</dd>
-          <dt>Status de leitura</dt>
-          <dd>Lido</dd>
-          <dt>Avaliação</dt>
-          <dd>5 de 5</dd>
-          <dt>Data da Leitura</dt>
-          <dd><time datetime="2026-08-15">15/08/2026</time></dd>
-          <dt>Anotações</dt>
-          <dd>Clássico Brasileiro sobre ciúme e a tragédia conjugal de Bentinho.Vale reler.</dd>
-        </dl>
+    <article id="detalhes-livro" hidden>
+      <header>
+        <h3 id="det-titulo"></h3>
+        <p id="det-autor"></p>
+      </header>
 
-        <footer>
-          <button type="button" class="btn btn-secundario">Editar livro</button>
-          <button type="button" class="btn btn-perigo">Excluir livro</button>
-        </footer>
-      </article>
+    <dl>
+      <dt>Categoria</dt>
+        <dd id="det-categoria"></dd>
+      <dt>Ano de publicação</dt>
+        <dd id="det-ano"></dd>
+      <dt>Páginas</dt>
+        <dd id="det-paginas"></dd>
+      <dt>Status de leitura</dt>
+        <dd id="det-status"></dd>
+      <dt>Avaliação</dt>
+        <dd id="det-avaliacao"></dd>
+      <dt>Data da leitura</dt>
+        <dd id="det-data"></dd>
+      <dt>Anotações</dt>
+        <dd id="det-notas"></dd>
+    </dl>
+
+  <footer>
+    <button type="button" id="btn-editar-detalhe" class="btn btn-secundario">Editar livro</button>
+    <button type="button" id="btn-excluir-detalhe" class="btn btn-perigo">Excluir livro</button>
+  </footer>
+  </article>
 
     </aside>
 
   </main>
 
 <footer class="rodape">    
-  <p>Personal Library — Trabalho Prático Individual, Etapa 2.</p>
+  <p>Personal Library — Trabalho Prático Individual, Etapa 3.</p>
     <p><a href="#topo">Voltar ao topo</a></p>
   </footer>
 
