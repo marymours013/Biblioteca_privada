@@ -88,8 +88,8 @@ const botaoBuscarApi = document.querySelector("#btn-buscar-api");
 const mensagemApi = document.querySelector("#mensagem-api");
 const resultadosApi = document.querySelector("#resultados-api");
 
-// ===== Mensagens para o usuário =====
-// tipo: "sucesso" ou "erro"
+// Mensagens para o usuário 
+// tipo: sucesso ou erro
 function mostrarMensagem(texto, tipo) {
   mensagemCadastro.textContent = texto;
   mensagemCadastro.className = "mensagem mensagem-" + tipo;
@@ -100,8 +100,8 @@ function esconderMensagem() {
   mensagemCadastro.hidden = true;
 }
 
-// ===== Leitura do formulário =====
-// Campos numéricos vazios viram null; os demais são convertidos para número.
+// Leitura do formulário
+// Campos numéricos vazios viram null, os demais são convertidos para número.
 function lerNumero(campo) {
   if (campo.value === "") {
     return null;
@@ -125,8 +125,8 @@ function lerFormulario() {
   };
 }
 
-// ===== Validação =====
-// Retorna uma lista de erros; cada erro tem o campo com problema e o texto.
+//  Validação 
+// Retorna uma lista de erros, cada erro tem o campo com problema e o texto
 function validarLivro(dados) {
   const erros = [];
 
@@ -161,8 +161,47 @@ function validarLivro(dados) {
   return erros;
 }
 
+// ---- Cadastro -----
+function limparFormulario() {
+  formLivro.reset();
+}
 
+function cadastrarLivro(dados) {
+  // O id (a hora atual em milissegundos) identifica cada livro de forma única.
+  dados.id = Date.now();
+  livros.push(dados);
+  salvarLivros(); // atualiza o localStorage
+}
 
+formLivro.addEventListener("submit", function (evento) {
+  evento.preventDefault(); // impede a página de recarregar
+
+  const dados = lerFormulario();
+  const erros = validarLivro(dados);
+
+  if (erros.length > 0) {
+    const textos = erros.map(function (erro) {
+      return erro.texto;
+    });
+    mostrarMensagem(textos.join(" "), "erro");
+    erros[0].campo.focus();
+    return;
+  }
+
+  if (livroEmEdicaoId === null) {
+    cadastrarLivro(dados);
+    limparFormulario();
+    mostrarMensagem("Livro salvo com sucesso!", "sucesso");
+    atualizarTela(); // mostra o novo livro na tabela
+  } else {
+    atualizarLivro(livroEmEdicaoId, dados);
+  }
+});
+
+botaoLimpar.addEventListener("click", function () {
+  limparFormulario();
+  esconderMensagem();
+});
 
 
 
