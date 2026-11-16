@@ -114,7 +114,7 @@ function lerFormulario() {
 
   return {
     titulo: campoTitulo.value.trim(),
-    autor: campoAutor.value.trim(),
+    autor: document.getElementById("autor").value.trim(),
     categoria: campoCategoria.value,
     ano: lerNumero(campoAno),
     paginas: lerNumero(campoPaginas),
