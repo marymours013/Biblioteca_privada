@@ -167,14 +167,13 @@ function limparFormulario() {
 }
 
 function cadastrarLivro(dados) {
-  // O id (a hora atual em milissegundos) identifica cada livro de forma única.
   dados.id = Date.now();
   livros.push(dados);
-  salvarLivros(); // atualiza o localStorage
+  salvarLivros(); 
 }
 
 formLivro.addEventListener("submit", function (evento) {
-  evento.preventDefault(); // impede a página de recarregar
+  evento.preventDefault(); 
 
   const dados = lerFormulario();
   const erros = validarLivro(dados);
@@ -192,7 +191,7 @@ formLivro.addEventListener("submit", function (evento) {
     cadastrarLivro(dados);
     limparFormulario();
     mostrarMensagem("Livro salvo com sucesso!", "sucesso");
-    atualizarTela(); // mostra o novo livro na tabela
+    atualizarTela(); 
   } else {
     atualizarLivro(livroEmEdicaoId, dados);
   }
@@ -203,12 +202,294 @@ botaoLimpar.addEventListener("click", function () {
   esconderMensagem();
 });
 
+// ---- Listagem -----
+// Textos que aparecem na tela para cada valor guardado
+const NOMES_CATEGORIA = {
+  "romance": "Romance",
+  "ficcao-cientifica": "Ficção científica",
+  "fantasia": "Fantasia",
+  "tecnologia": "Tecnologia",
+  "biografia": "Biografia",
+  "outros": "Outros"
+};
 
+const NOMES_STATUS = {
+  "quero-ler": "Quero ler",
+  "lendo": "Lendo",
+  "lido": "Lido"
+};
 
+// Classe CSS do selo de cada status
+const CLASSES_STATUS = {
+  "quero-ler": "selo-quero",
+  "lendo": "selo-lendo",
+  "lido": "selo-lido"
+};
 
+// Mostra um traço quando o campo não foi preenchido
+function textoOuTraco(valor) {
+  if (valor === null || valor === undefined || valor === "") {
+    return "—";
+  }
+  return valor;
+}
 
+function criarCelula(texto) {
+  const celula = document.createElement("td");
+  celula.textContent = texto; // textContent evita que texto digitado vire HTML
+  return celula;
+}
 
+function criarBotao(texto, classes) {
+  const botao = document.createElement("button");
+  botao.type = "button";
+  botao.className = classes;
+  botao.textContent = texto;
+  return botao;
+}
 
+function criarLinha(livro, numero) {
+  const linha = document.createElement("tr");
+
+  if (livro.id === livroSelecionadoId) {
+    linha.classList.add("selecionada"); 
+  }
+
+  linha.appendChild(criarCelula(numero));
+
+  const celulaTitulo = document.createElement("th");
+  celulaTitulo.scope = "row";
+  celulaTitulo.textContent = livro.titulo;
+  linha.appendChild(celulaTitulo);
+
+  linha.appendChild(criarCelula(livro.autor));
+  linha.appendChild(criarCelula(NOMES_CATEGORIA[livro.categoria] || livro.categoria));
+  linha.appendChild(criarCelula(textoOuTraco(livro.ano)));
+
+  // O status aparece como um selo colorido
+  const celulaStatus = document.createElement("td");
+  const selo = document.createElement("span");
+  selo.className = "selo " + CLASSES_STATUS[livro.status];
+  selo.textContent = NOMES_STATUS[livro.status] || livro.status;
+  celulaStatus.appendChild(selo);
+  linha.appendChild(celulaStatus);
+
+  linha.appendChild(criarCelula(textoOuTraco(livro.avaliacao)));
+
+  // Botões de ação
+  const celulaAcoes = document.createElement("td");
+  const botaoDetalhes = criarBotao("Detalhes", "btn btn-secundario btn-pequeno");
+  botaoDetalhes.addEventListener("click", function () {
+    mostrarDetalhes(livro.id);
+  });
+  celulaAcoes.appendChild(botaoDetalhes);
+
+  const botaoExcluir = criarBotao("Excluir", "btn btn-perigo btn-pequeno");
+  botaoExcluir.addEventListener("click", function () {
+    excluirLivro(livro.id);
+  });
+  celulaAcoes.appendChild(botaoExcluir);
+  linha.appendChild(celulaAcoes);
+
+  return linha;
+}
+
+function atualizarContador(quantidade) {
+  if (quantidade === 1) {
+    contador.textContent = "1 livro encontrado.";
+  } else {
+    contador.textContent = quantidade + " livros encontrados.";
+  }
+}
+
+// Desenha a tabela a partir de uma lista de livros
+function renderizarLista(listaParaMostrar) {
+  listaLivros.textContent = ""; 
+
+  listaParaMostrar.forEach(function (livro, indice) {
+    listaLivros.appendChild(criarLinha(livro, indice + 1));
+  });
+
+  atualizarContador(listaParaMostrar.length);
+  mensagemVazia.hidden = listaParaMostrar.length > 0;
+}
+
+// Atualiza tudo que depende da lista de livros
+function atualizarTela() {
+  renderizarLista(obterLivrosVisiveis());
+}
+
+// ----- Detalhes -----
+// Transforma "2026-08-15" em "15/08/2026"
+function formatarData(texto) {
+  if (texto === "" || texto === undefined || texto === null) {
+    return "—";
+  }
+  const partes = texto.split("-");
+  return partes[2] + "/" + partes[1] + "/" + partes[0];
+}
+
+function buscarLivroPorId(id) {
+  return livros.find(function (livro) {
+    return livro.id === id;
+  });
+}
+
+function preencherDetalhes(id) {
+  const livro = buscarLivroPorId(id);
+
+  if (livro === undefined) {
+    return;
+  }
+
+  livroSelecionadoId = id;
+
+  detTitulo.textContent = livro.titulo;
+  detAutor.textContent = "por " + livro.autor;
+  detCategoria.textContent = NOMES_CATEGORIA[livro.categoria] || livro.categoria;
+  detAno.textContent = textoOuTraco(livro.ano);
+  detPaginas.textContent = textoOuTraco(livro.paginas);
+  detStatus.textContent = NOMES_STATUS[livro.status] || livro.status;
+  detAvaliacao.textContent = livro.avaliacao === null ? "—" : livro.avaliacao + " de 5";
+  detData.textContent = formatarData(livro.dataLeitura);
+  detNotas.textContent = textoOuTraco(livro.notas);
+
+  detalhesVazio.hidden = true;
+  detalhesLivro.hidden = false;
+
+  atualizarTela(); 
+}
+
+// Abre os detalhes e leva a tela até o painel
+function mostrarDetalhes(id) {
+  preencherDetalhes(id);
+  painelDetalhes.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+// ----- Exclusão -----
+// Fecha o painel de detalhes e volta para a mensagem inicial
+function limparDetalhes() {
+  livroSelecionadoId = null;
+  detalhesLivro.hidden = true;
+  detalhesVazio.hidden = false;
+}
+
+function excluirLivro(id) {
+  const livro = buscarLivroPorId(id);
+
+  if (livro === undefined) {
+    return;
+  }
+
+  const confirmou = confirm('Excluir o livro "' + livro.titulo + '"? Essa ação não pode ser desfeita.');
+
+  if (!confirmou) {
+    return;
+  }
+
+  // filter mantém todos os livros, menos o que foi excluído
+  livros = livros.filter(function (item) {
+    return item.id !== id;
+  });
+
+  salvarLivros(); 
+
+  if (livroSelecionadoId === id) {
+    limparDetalhes();
+  }
+
+  if (livroEmEdicaoId === id) {
+    sairDoModoEdicao();
+  }
+
+  atualizarTela();
+}
+
+btnExcluirDetalhe.addEventListener("click", function () {
+  excluirLivro(livroSelecionadoId);
+});
+
+// ----- Edição ------
+// Campos vazios (null) aparecem em branco no formulário
+function valorOuVazio(valor) {
+  if (valor === null || valor === undefined) {
+    return "";
+  }
+  return valor;
+}
+
+function iniciarEdicao(id) {
+  const livro = buscarLivroPorId(id);
+
+  if (livro === undefined) {
+    return;
+  }
+
+  livroEmEdicaoId = id;
+
+  // Coloca os dados do livro no formulário de cadastro
+  campoTitulo.value = livro.titulo;
+  campoAutor.value = livro.autor;
+  campoCategoria.value = livro.categoria;
+  campoAno.value = valorOuVazio(livro.ano);
+  campoPaginas.value = valorOuVazio(livro.paginas);
+  campoAvaliacao.value = valorOuVazio(livro.avaliacao);
+  campoDataLeitura.value = valorOuVazio(livro.dataLeitura);
+  campoNotas.value = valorOuVazio(livro.notas);
+  document.querySelector('input[name="status"][value="' + livro.status + '"]').checked = true;
+
+  // Deixa claro que o formulário está no modo de edição
+  tituloCadastro.textContent = "Editar livro";
+  botaoSalvar.textContent = "Salvar alterações";
+  botaoCancelar.hidden = false;
+  secaoCadastro.classList.add("modo-edicao");
+
+  esconderMensagem();
+  secaoCadastro.scrollIntoView({ behavior: "smooth", block: "start" });
+  campoTitulo.focus();
+}
+
+function sairDoModoEdicao() {
+  livroEmEdicaoId = null;
+  tituloCadastro.textContent = "Cadastrar livro";
+  botaoSalvar.textContent = "Salvar livro";
+  botaoCancelar.hidden = true;
+  secaoCadastro.classList.remove("modo-edicao");
+  limparFormulario();
+}
+
+function atualizarLivro(id, dados) {
+  // findIndex devolve a posição do livro na lista (ou -1 se não achar)
+  const posicao = livros.findIndex(function (livro) {
+    return livro.id === id;
+  });
+
+  if (posicao === -1) {
+    return;
+  }
+
+  dados.id = id; // o livro mantém o mesmo id
+  livros[posicao] = dados;
+  salvarLivros(); // atualiza o localStorage
+
+  sairDoModoEdicao();
+  mostrarMensagem("Livro atualizado com sucesso!", "sucesso");
+
+  if (livroSelecionadoId === id) {
+    preencherDetalhes(id); // atualiza o painel de detalhes
+  } else {
+    atualizarTela();
+  }
+}
+
+btnEditarDetalhe.addEventListener("click", function () {
+  iniciarEdicao(livroSelecionadoId);
+});
+
+botaoCancelar.addEventListener("click", function () {
+  sairDoModoEdicao();
+  esconderMensagem();
+});
 
 
 
