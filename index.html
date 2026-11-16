@@ -30,13 +30,14 @@
     <!-- CADASTRO / EDIÇÃO -->
     <section id="cadastro" aria-labelledby="titulo-cadastro">
       <h2 id="titulo-cadastro">Cadastrar livro</h2>
-      <p>Preencha os dados para adicionar um livro à sua biblioteca.Os campos marcados com * são obrigatórios.</p>
-      
-      <p id="mensagem-cadastro" class="mensagem" role="status" hidden></p>
-      
-      <form id="form-livro" action="#" method="post" novalidate>
-        <input type="hidden" id="livro-id" name="id">
+      <p>Preencha os dados para adicionar um livro à sua biblioteca. Os campos marcados com * são obrigatórios.</p>
 
+      <!-- Feedback ao usuário (preenchido pelo JavaScript) -->
+      <p id="mensagem-cadastro" class="mensagem" role="status" hidden></p>
+
+      <form id="form-livro" action="#" method="post" novalidate>
+        <!-- Guarda o id do livro quando estiver no modo de edição -->
+        <input type="hidden" id="livro-id" name="id">
 
         <fieldset>
           <legend>Dados do livro</legend>
@@ -97,7 +98,6 @@
             <label for="data-leitura">Data da leitura</label>
             <input type="date" id="data-leitura" name="dataLeitura">
           </p>
-
         </fieldset>
 
         <p class="campo-largo">
@@ -118,8 +118,7 @@
       <h2 id="titulo-biblioteca">Meus livros</h2>
 
       <!-- Pesquisa, filtros e ordenação -->
-      <form action="#" method="get" aria-label="Pesquisar, filtrar e ordenar livros">
-      
+      <form id="form-filtros" action="#" method="get" aria-label="Pesquisar, filtrar e ordenar livros">
         <fieldset>
           <legend>Encontrar livros</legend>
 
@@ -154,10 +153,10 @@
           <div class="campo">
             <label for="ordenar">Ordenar por</label>
             <select id="ordenar" name="ordenar">
-              <option value="titulo">Título(A–Z)</option>
-              <option value="autor">Autor(A–Z)</option>
-              <option value="ano">Ano de publicação(mais antigo primeiro)</option>
-              <option value="avaliacao">Avaliação(maior primeiro)</option>
+              <option value="titulo">Título (A–Z)</option>
+              <option value="autor">Autor (A–Z)</option>
+              <option value="ano">Ano (mais antigo primeiro)</option>
+              <option value="avaliacao">Avaliação (maior primeiro)</option>
             </select>
           </div>
 
@@ -170,25 +169,26 @@
       <p id="contador" class="contador" role="status"></p>
 
       <div class="tabela-responsiva" role="region" aria-label="Tabela de livros" tabindex="0">
-      <table>
-        <caption>Livros cadastrados na biblioteca</caption>
-        <thead>
-          <tr>
-            <th scope="col">Nº</th>
-            <th scope="col">Título</th>
-            <th scope="col">Autor</th>
-            <th scope="col">Categoria</th>
-            <th scope="col">Ano</th>
-            <th scope="col">Status</th>
-            <th scope="col">Avaliação</th>
-            <th scope="col">Ações</th>
-          </tr>
-        </thead>
+        <table>
+          <caption>Livros cadastrados na biblioteca</caption>
+          <thead>
+            <tr>
+              <th scope="col">Nº</th>
+              <th scope="col">Título</th>
+              <th scope="col">Autor</th>
+              <th scope="col">Categoria</th>
+              <th scope="col">Ano</th>
+              <th scope="col">Status</th>
+              <th scope="col">Avaliação</th>
+              <th scope="col">Ações</th>
+            </tr>
+          </thead>
+          <!-- Linhas geradas pelo JavaScript -->
           <tbody id="lista-livros"></tbody>
-      </table>
+        </table>
       </div>
 
-        <p id="mensagem-vazia" class="mensagem mensagem-info" hidden>Nenhum livro encontrado.Cadastre um livro ou altere os filtros.</p>
+      <p id="mensagem-vazia" class="mensagem mensagem-info" hidden>Nenhum livro encontrado. Cadastre um livro ou altere os filtros.</p>
 
       <!-- Busca no catálogo Open Library (formulário próprio) -->
       <form id="form-api" action="#" method="get" aria-label="Buscar livros no catálogo Open Library">
@@ -214,42 +214,43 @@
     <aside id="detalhes" aria-labelledby="titulo-detalhes">
       <h2 id="titulo-detalhes">Detalhes do livro</h2>
 
-    <p id="detalhes-vazio" class="mensagem mensagem-info">Selecione um livro na lista para ver os detalhes.</p>
+      <p id="detalhes-vazio" class="mensagem mensagem-info">Selecione um livro na lista para ver os detalhes.</p>
 
-    <article id="detalhes-livro" hidden>
-      <header>
-        <h3 id="det-titulo"></h3>
-        <p id="det-autor"></p>
-      </header>
+      <!-- Preenchido pelo JavaScript quando um livro é selecionado -->
+      <article id="detalhes-livro" hidden>
+        <header>
+          <h3 id="det-titulo"></h3>
+          <p id="det-autor"></p>
+        </header>
 
-    <dl>
-      <dt>Categoria</dt>
-        <dd id="det-categoria"></dd>
-      <dt>Ano de publicação</dt>
-        <dd id="det-ano"></dd>
-      <dt>Páginas</dt>
-        <dd id="det-paginas"></dd>
-      <dt>Status de leitura</dt>
-        <dd id="det-status"></dd>
-      <dt>Avaliação</dt>
-        <dd id="det-avaliacao"></dd>
-      <dt>Data da leitura</dt>
-        <dd id="det-data"></dd>
-      <dt>Anotações</dt>
-        <dd id="det-notas"></dd>
-    </dl>
+        <dl>
+          <dt>Categoria</dt>
+          <dd id="det-categoria"></dd>
+          <dt>Ano de publicação</dt>
+          <dd id="det-ano"></dd>
+          <dt>Páginas</dt>
+          <dd id="det-paginas"></dd>
+          <dt>Status de leitura</dt>
+          <dd id="det-status"></dd>
+          <dt>Avaliação</dt>
+          <dd id="det-avaliacao"></dd>
+          <dt>Data da leitura</dt>
+          <dd id="det-data"></dd>
+          <dt>Anotações</dt>
+          <dd id="det-notas"></dd>
+        </dl>
 
-  <footer>
-    <button type="button" id="btn-editar-detalhe" class="btn btn-secundario">Editar livro</button>
-    <button type="button" id="btn-excluir-detalhe" class="btn btn-perigo">Excluir livro</button>
-  </footer>
-  </article>
-</aside>
+        <footer>
+          <button type="button" id="btn-editar-detalhe" class="btn btn-secundario">Editar livro</button>
+          <button type="button" id="btn-excluir-detalhe" class="btn btn-perigo">Excluir livro</button>
+        </footer>
+      </article>
+    </aside>
 
   </main>
 
-<footer class="rodape">    
-  <p>Personal Library — Trabalho Prático Individual, Etapa 3.</p>
+  <footer class="rodape">
+    <p>Personal Library — Trabalho Prático Individual, Etapa 3.</p>
     <p><a href="#topo">Voltar ao topo</a></p>
   </footer>
 
