@@ -555,7 +555,103 @@ botaoLimparFiltros.addEventListener("click", function () {
   atualizarTela();
 });
 
+// ----- API Open Library ------
+function mostrarMensagemApi(texto, tipo) {
+  mensagemApi.textContent = texto;
+  mensagemApi.className = "mensagem campo-largo mensagem-" + tipo;
+  mensagemApi.hidden = false;
+}
 
+// Pede à API até 5 livros que combinem com o texto digitado
+async function buscarNaApi(termo) {
+  const url = "https://openlibrary.org/search.json?q=" + encodeURIComponent(termo) +
+    "&limit=5&fields=title,author_name,first_publish_year,number_of_pages_median";
+
+  const resposta = await fetch(url);
+
+  if (!resposta.ok) {
+    throw new Error("A API respondeu com erro " + resposta.status);
+  }
+
+  const dados = await resposta.json();
+  return dados.docs;
+}
+
+// Preenche o cadastro com o livro escolhido na API
+function usarResultadoDaApi(resultado) {
+  campoTitulo.value = resultado.title || "";
+  campoAutor.value = resultado.author_name ? resultado.author_name[0] : "";
+  campoAno.value = resultado.first_publish_year || "";
+  campoPaginas.value = resultado.number_of_pages_median || "";
+
+  mostrarMensagem("Dados preenchidos pela Open Library. Escolha a categoria e o status e salve o livro.", "sucesso");
+  secaoCadastro.scrollIntoView({ behavior: "smooth", block: "start" });
+  campoCategoria.focus();
+}
+
+function mostrarResultadosApi(resultados) {
+  resultadosApi.textContent = "";
+
+  resultados.forEach(function (resultado) {
+    const item = document.createElement("li");
+
+    let texto = resultado.title || "Sem título";
+    if (resultado.author_name) {
+      texto = texto + " — " + resultado.author_name[0];
+    }
+    if (resultado.first_publish_year) {
+      texto = texto + " (" + resultado.first_publish_year + ")";
+    }
+
+    const descricao = document.createElement("span");
+    descricao.textContent = texto;
+
+    const botaoUsar = criarBotao("Usar este livro", "btn btn-secundario btn-pequeno");
+    botaoUsar.addEventListener("click", function () {
+      usarResultadoDaApi(resultado);
+    });
+
+    item.appendChild(descricao);
+    item.appendChild(botaoUsar);
+    resultadosApi.appendChild(item);
+  });
+
+  resultadosApi.hidden = false;
+}
+
+formApi.addEventListener("submit", async function (evento) {
+  evento.preventDefault();
+
+  const termo = campoBuscaApi.value.trim();
+
+  if (termo === "") {
+    mostrarMensagemApi("Digite um título ou autor para buscar.", "erro");
+    resultadosApi.hidden = true;
+    return;
+  }
+
+  botaoBuscarApi.disabled = true;
+  resultadosApi.hidden = true;
+  mostrarMensagemApi("Buscando no catálogo...", "info");
+
+  try {
+    const resultados = await buscarNaApi(termo);
+
+    if (resultados.length === 0) {
+      mostrarMensagemApi("Nenhum livro encontrado no catálogo.", "info");
+    } else {
+      mensagemApi.hidden = true;
+      mostrarResultadosApi(resultados);
+    }
+  } catch (erro) {
+    mostrarMensagemApi("Não foi possível buscar no catálogo agora. Tente novamente.", "erro");
+  } finally {
+    botaoBuscarApi.disabled = false;
+  }
+});
+
+// Ao abrir a página, mostra os livros salvos
+atualizarTela();
 
 
 
