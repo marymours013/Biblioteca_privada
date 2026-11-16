@@ -491,7 +491,69 @@ botaoCancelar.addEventListener("click", function () {
   esconderMensagem();
 });
 
+// ----- Pesquisa, filtros e ordenação ------
+function obterLivrosVisiveis() {
+  const termo = campoBusca.value.trim().toLowerCase();
+  const categoria = filtroCategoria.value;
+  const status = filtroStatus.value;
 
+  const filtrados = livros.filter(function (livro) {
+    const combinaBusca = termo === "" ||
+      livro.titulo.toLowerCase().includes(termo) ||
+      livro.autor.toLowerCase().includes(termo);
+    const combinaCategoria = categoria === "" || livro.categoria === categoria;
+    const combinaStatus = status === "" || livro.status === status;
+
+    return combinaBusca && combinaCategoria && combinaStatus;
+  });
+
+  return ordenarLivros(filtrados);
+}
+
+// Devolve uma cópia da lista na ordem escolhida (a lista original não muda)
+function ordenarLivros(lista) {
+  const criterio = selectOrdenar.value;
+  const copia = lista.slice();
+
+  copia.sort(function (a, b) {
+    if (criterio === "autor") {
+      return a.autor.localeCompare(b.autor, "pt-BR");
+    }
+
+    if (criterio === "ano") {
+      // livros sem ano vão para o fim
+      const anoA = a.ano === null ? 9999 : a.ano;
+      const anoB = b.ano === null ? 9999 : b.ano;
+      return anoA - anoB;
+    }
+
+    if (criterio === "avaliacao") {
+      // maior nota primeiro; sem nota vai para o fim
+      const notaA = a.avaliacao === null ? 0 : a.avaliacao;
+      const notaB = b.avaliacao === null ? 0 : b.avaliacao;
+      return notaB - notaA;
+    }
+
+    return a.titulo.localeCompare(b.titulo, "pt-BR"); // título (padrão)
+  });
+
+  return copia;
+}
+
+// Enter no campo de pesquisa não deve recarregar a página
+formFiltros.addEventListener("submit", function (evento) {
+  evento.preventDefault();
+});
+
+campoBusca.addEventListener("input", atualizarTela);
+filtroCategoria.addEventListener("change", atualizarTela);
+filtroStatus.addEventListener("change", atualizarTela);
+selectOrdenar.addEventListener("change", atualizarTela);
+
+botaoLimparFiltros.addEventListener("click", function () {
+  formFiltros.reset();
+  atualizarTela();
+});
 
 
 
